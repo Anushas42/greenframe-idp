@@ -1,4 +1,4 @@
-name: Greenframe Analysis
+name: Greenframe Analysis 
 on: [push]
 jobs:
   greenframeci:
