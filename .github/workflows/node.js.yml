@@ -1,0 +1,25 @@
+name: Greenframe Analysis
+on: [push]
+jobs:
+  greenframeci:
+    runs-on: ubuntu-latest
+    name: GreenFrame
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # Fetch all the git history to enable git comparison
+      - name: Setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm install
+      - run: npm ci
+      - run: npm install express
+      - run: npm run build --if-present
+      - run: npm start & npx wait-on http://localhost:8081
+
+      - name: GreenFrame Analysis
+        uses: marmelab/greenframe-action@1.0.0
+        env:
+          GREENFRAME_SECRET_TOKEN: ${{secrets.GREENFRAME_SECRET_TOKEN}}
